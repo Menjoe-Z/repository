@@ -33,14 +33,15 @@ public class MainTest {
 		requestHeaders.add("api-key", "mpXtBeHRkt2Aj0Ye3=48RaoBmK4=");
 		HttpEntity<String> requestEntity = new HttpEntity<String>(requestHeaders);
 		Map<String, String> params = new HashMap<>();
-		params.put("key_word", "test");
+		params.put("online", "false");
+		params.put("page", "2");
 		ResponseEntity<String> response = 
 				restTemplate.exchange("http://api.heclouds.com/devices", 
 						HttpMethod.GET, requestEntity, String.class, params);
 		String sttr = response.getBody();
 		JSONObject data = JSONObject.fromObject(sttr);
-		//System.out.println(data.getString("data"));
-		LOGGER.info(data.getString("data"));
+		System.out.println(data.getString("data"));
+		//LOGGER.info(data.getString("data"));
 	}
 	
 }

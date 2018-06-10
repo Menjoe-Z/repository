@@ -4,9 +4,14 @@ spring:
   thymeleaf:
     cache: false
     mode: HTML
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: plzt_onenet
 logging:
   level: 
     root: INFO
     org.springframework.web: INFO
     org.hibernate: ERROR
   file: logs/log.log
+  

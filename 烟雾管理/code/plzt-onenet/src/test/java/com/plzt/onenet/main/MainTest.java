@@ -44,4 +44,20 @@ public class MainTest {
 		//LOGGER.info(data.getString("data"));
 	}
 	
+	@Test
+	public void test2() {
+		HttpHeaders requestHeaders = new HttpHeaders();
+		requestHeaders.add("api-key", "mpXtBeHRkt2Aj0Ye3=48RaoBmK4=");
+		HttpEntity<String> requestEntity = new HttpEntity<String>(requestHeaders);
+		Map<String, String> params = new HashMap<>();
+		params.put("page", "1");
+		ResponseEntity<String> response = 
+				restTemplate.exchange("http://api.heclouds.com/triggers", 
+						HttpMethod.GET, requestEntity, String.class, params);
+		String sttr = response.getBody();
+		JSONObject data = JSONObject.fromObject(sttr);
+		System.out.println(data.getString("data"));
+		//LOGGER.info(data.getString("data"));
+	}
+	
 }

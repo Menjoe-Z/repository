@@ -1,4 +1,4 @@
-package com.plzt.onenet.main.controller;
+package com.plzt.onenet.main.controller.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

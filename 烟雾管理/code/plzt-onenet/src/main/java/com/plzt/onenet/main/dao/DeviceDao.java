@@ -1,5 +1,6 @@
 package com.plzt.onenet.main.dao;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,13 @@ public class DeviceDao {
 		JSONObject result = JSONObject.fromObject(resultStr);
 		JSONObject data = result.getJSONObject("data");
 		return data.toString();
+	}
+
+	public String smoke(String devid) {
+		JSONObject params = new JSONObject();
+		params.put("cmd", "smoke");
+		String resultStr = httpHandler.doPost("/cmds?device_id=" + devid, params.toString());
+		return resultStr;
 	}
 	
 }

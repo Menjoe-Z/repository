@@ -48,4 +48,17 @@ public class DeviceController {
 		return new ResultMsg(ErrorCode.操作失败.getCode(), ErrorCode.操作失败.getMsg());
 	}
 	
+	@PostMapping
+	public ResultMsg smoke(
+			@RequestParam("devid")String devid,
+			@RequestParam("objid")String objid
+		) {
+		try {
+			return deviceService.smoke(devid, objid);
+		} catch (Exception e) {
+			LOGGER.error("绑定设备出错", e);
+		}
+		return new ResultMsg(ErrorCode.操作失败.getCode(), ErrorCode.操作失败.getMsg());
+	}
+	
 }

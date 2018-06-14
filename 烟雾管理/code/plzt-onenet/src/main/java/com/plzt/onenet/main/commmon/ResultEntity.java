@@ -6,7 +6,7 @@ public class ResultEntity {
 	
 	private Integer pageNo;
 	
-	private String rows;
+	private Object rows;
 	
 	public ResultEntity() {
 		super();
@@ -34,13 +34,12 @@ public class ResultEntity {
 	public void setPageNo(Integer pageNo) {
 		this.pageNo = pageNo;
 	}
-	
-	public String getRows() {
+
+	public Object getRows() {
 		return rows;
 	}
-	
-	public void setRows(String rows) {
+
+	public void setRows(Object rows) {
 		this.rows = rows;
 	}
-	
 }

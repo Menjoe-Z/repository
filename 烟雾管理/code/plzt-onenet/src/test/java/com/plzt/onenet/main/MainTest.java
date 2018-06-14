@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import com.plzt.onenet.main.dao.DeviceDao;
+
 import net.sf.json.JSONObject;
 
 @SpringBootTest
@@ -59,5 +61,12 @@ public class MainTest {
 		System.out.println(data.getString("data"));
 		//LOGGER.info(data.getString("data"));
 	}
+	@Autowired
+	private DeviceDao deviceDao; 
+	@Test
+	public void test3() {
+		System.out.println(deviceDao.smoke("33362340"));
+	}
+	
 	
 }

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.plzt.onenet.main.commmon.Constant;
 import com.plzt.onenet.main.commmon.ResultEntity;
+import com.plzt.onenet.main.service.DeviceService;
 
 import net.sf.json.JSONObject;
 
@@ -27,6 +28,9 @@ public class MainController {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private DeviceService deviceService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 	
@@ -71,6 +75,25 @@ public class MainController {
 	@RequestMapping("/index")
 	public String index() {
 		return "main/listDevice";
+	}
+	
+	@RequestMapping("/bind")
+	public String bind() {
+		return "main/listBind";
+	}
+	
+	@RequestMapping("/bind/list")
+	@ResponseBody
+	public ResultEntity bindList(
+			@RequestParam(value = "pageNumber", defaultValue = "1")Integer pageNumber) {
+		ResultEntity entity = null; 
+		try {
+			entity = deviceService.bindList(pageNumber);
+		} catch (Exception e) {
+			LOGGER.error("获取绑定列表失败:\t" + e.getMessage());
+			entity = new ResultEntity(1, 30, null);
+		}
+		return entity;
 	}
 	
 }

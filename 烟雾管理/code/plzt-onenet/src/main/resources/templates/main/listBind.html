@@ -13,8 +13,8 @@
      <a class="navbar-brand active" href="#">主页</a>
    </div>
    <ul class="nav navbar-nav">
-     <li class="active"><a href="/main/index">设备 <span class="sr-only"></span></a></li>
-     <li class=""><a href="/main/bind">绑定 <span class="sr-only"></span></a></li>
+     <li class=""><a href="/main/index">设备 <span class="sr-only"></span></a></li>
+     <li class="active"><a href="/main/bind">绑定 <span class="sr-only"></span></a></li>
    </ul>
    <ul class="nav navbar-nav navbar-right">
      <li class="dropdown">
@@ -30,30 +30,6 @@
   </div>
 </nav>
 <div class="container-fluid">
-<!-- 
-	<form id="search_form" class="form-inline" method="post">
-	  <div class="form-group">
-	    <label for="exampleInputName2">关键字:</label>
-	    <input type="text" class="form-control" name="key_word" id="exampleInputName2" placeholder="">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputEmail2">在线:</label>
-		<select name="online" class="form-control">
-		  <option value="">请选择</option>
-		  <option value="true">是</option>
-		  <option value="false">否</option>
-		</select>
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputEmail2">私有:</label>
-		<select name="private" class="form-control">
-		  <option value="">请选择</option>
-		  <option value="true">是</option>
-		  <option value="false">否</option>
-		</select>	  </div>
-	  <button type="button" onclick="search()" class="btn btn-default">搜索</button>
-	</form>
- -->
 	<hr class="simple" color="#6f5499" />
 	<table id="device-table" class="table table-bordered text text-center" data-pagination="true">
 	   <thead>
@@ -107,23 +83,17 @@ function init_page(toolbar_el, search_condition) {
 		   params.pageNumber = this.pageNumber;
 		   return params;
 	   },
-	   url: "/main/list",
+	   url: "/main/bind/list",
 	   sidePagination: "server",
+	   dataType: "json",
 	   search: false,
-	   dataType:"json",
 	   toolbar: toolbar_el,
-	   pagination: true,
-	   responseHandler: function(res) {
-	       return {
-	           "total": res.total,
-	           "rows": (res.rows && res.rows.length) > 0 ? JSON.parse(res.rows) : []
-	       };
-	   }
+	   pagination: true
 	};
 	$('#device-table').bootstrapTable(table_opt);
 }
 $(function() {
-	init_page("#search_form");
-}) 
+	init_page("#search_form", {});
+})
 </script>
 </html>

@@ -23,6 +23,12 @@ public class HttpHandler {
 		return new HttpEntity<String>(requestHeaders);
 	}
 	
+	private final static HttpEntity<String> getHeader(String params) {
+		HttpHeaders requestHeaders = new HttpHeaders();
+		requestHeaders.add("api-key", "mpXtBeHRkt2Aj0Ye3=48RaoBmK4=");
+		return new HttpEntity<String>(params, requestHeaders);
+	}
+	
 	public String doGet(String action, Map<String, Object> params) {
 		StringBuilder requrl = new StringBuilder(Constant.BASEURL).append(action).append("?");
 		if (params != null && params.size() > 0) {
@@ -62,4 +68,11 @@ public class HttpHandler {
 						params);
 		return response.getBody();
 	}
+	
+	public String doPost(String action, String params) {
+		String requrl = Constant.BASEURL + action;
+		String result = restTemplate.postForObject(requrl, getHeader(params), String.class);
+		return result;
+	}
+	
 }

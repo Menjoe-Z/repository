@@ -1,0 +1,15 @@
+#SQL
+{
+    "_id" : ObjectId("5b1c372e1846a72e2d687c9e"),
+    "username" : "admin",
+    "password" : "21232f297a57a5a743894a0e4a801fc3",
+    "createtime" : ISODate("2018-06-09T20:23:10.009Z")
+}
+1.在mongodb中建立一个叫plzt_onenet的数据库
+2.创建一个叫user的集合
+3.运行上边的脚本
+
+后台管理路径为跟路径
+
+登录名:admin
+密码:admin

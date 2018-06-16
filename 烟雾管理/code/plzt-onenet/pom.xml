@@ -3,6 +3,7 @@
   <groupId>com.plzt.onenet</groupId>
   <artifactId>plzt-onenet</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -71,7 +72,7 @@
   	</plugins>
   </build>
   <properties>
-  	  <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
+  	  <!-- <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version> -->
       <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>

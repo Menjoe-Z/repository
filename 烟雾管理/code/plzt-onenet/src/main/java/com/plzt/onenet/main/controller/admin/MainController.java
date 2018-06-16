@@ -27,9 +27,6 @@ import net.sf.json.JSONObject;
 public class MainController {
 	
 	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Autowired
 	private DeviceService deviceService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
@@ -41,34 +38,13 @@ public class MainController {
 			@RequestParam(value = "online", required = false, defaultValue = "")String online,
 			@RequestParam(value = "private", required = false, defaultValue = "")String priv,
 			@RequestParam(value = "key_word", required = false)String key_word) {
-		HttpHeaders requestHeaders = new HttpHeaders();
-		requestHeaders.add("api-key", "mpXtBeHRkt2Aj0Ye3=48RaoBmK4=");
-		Map<String, Object> params = new HashMap<>();
-		params.put("page", pageNumber);
-		params.put("per_page", 30);
-		params.put("online", online);
-		params.put("key_word", key_word);
-		params.put("private", priv);
-		ResponseEntity<String> response = 
-				restTemplate.exchange(
-						//, defaultValue = "1" Constant.BASEURL + "/devices?key_word={keyword}", &online={online}&private={private}
-						Constant.BASEURL + "/devices?page={page}&pre_page={per_page}&key_word={key_word}",
-						HttpMethod.GET,
-						new HttpEntity<String>(requestHeaders),
-						String.class,
-						params);
-		String listStr = response.getBody();
-		ResultEntity entity = new ResultEntity();
-		if (StringUtils.isEmpty(listStr)) {
-			LOGGER.info("获取列表为空");
-			return entity;
+		ResultEntity entity = null; 
+		try {
+			entity = deviceService.deviceList(pageNumber, online, priv, key_word);
+		} catch (Exception e) {
+			LOGGER.error("获取设备列表失败:\t" + e.getMessage());
+			entity = new ResultEntity();
 		}
-		JSONObject result = JSONObject.fromObject(listStr);
-		JSONObject data = result.getJSONObject("data");
-		LOGGER.info("获取到数据:\t" + result.getString("errno") + ",\t" +result.getString("error"));
-		entity.setTotal(data.getInt("total_count"));
-		entity.setPageNo(data.getInt("page"));
-		entity.setRows(data.getString("devices"));
 		return entity;
 	}
 	
@@ -91,7 +67,7 @@ public class MainController {
 			entity = deviceService.bindList(pageNumber);
 		} catch (Exception e) {
 			LOGGER.error("获取绑定列表失败:\t" + e.getMessage());
-			entity = new ResultEntity(1, 30, null);
+			entity = new ResultEntity();
 		}
 		return entity;
 	}

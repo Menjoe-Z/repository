@@ -1,16 +1,18 @@
 package com.plzt.onenet.main.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import com.plzt.onenet.main.commmon.ErrorCode;
 import com.plzt.onenet.main.commmon.ResultEntity;
 import com.plzt.onenet.main.commmon.ResultMsg;
@@ -28,6 +30,8 @@ public class DeviceServiceImpl implements DeviceService {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceServiceImpl.class);
 	
 	@Override
 	public ResultMsg bindDevice(String devid, String objid) {
@@ -109,6 +113,50 @@ public class DeviceServiceImpl implements DeviceService {
 		entity.setPageNo(pageNumber);
 		entity.setRows(rows);
 		return entity;
+	}
+
+	@Override
+	public ResultEntity deviceList(Integer pageNumber, String online, String priv, String key_word) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("page", pageNumber);
+		params.put("per_page", 30);
+		if (!StringUtils.isEmpty(online)) {
+			params.put("online", online);
+		}
+		if (!StringUtils.isEmpty(key_word)) {
+			params.put("key_word", key_word);
+		}
+		if (!StringUtils.isEmpty(priv)) {
+			params.put("private", priv);
+		}
+		String listStr = deviceDao.deviceList(params);
+		ResultEntity entity = new ResultEntity();
+		if (StringUtils.isEmpty(listStr)) {
+			LOGGER.info("获取列表为空");
+			return entity;
+		}
+		JSONObject result = JSONObject.fromObject(listStr);
+		JSONObject data = result.getJSONObject("data");
+		LOGGER.info("获取到数据:\t" + result.getString("errno") + ",\t" +result.getString("error"));
+		entity.setTotal(data.getInt("total_count"));
+		entity.setPageNo(data.getInt("page"));
+		entity.setRows(data.getJSONArray("devices"));
+		return entity;
+	}
+
+	@Override
+	public ResultMsg removeBind(String devid, String objid) {
+		ResultMsg status = deviceStatus(devid);
+		if (status.getErrno() != 0) {
+			return status;
+		}
+		Query query = Query.query(Criteria.where("devid").is(devid).and("objid").is(objid));
+		DeviceRelation record = mongoTemplate.findOne(query, DeviceRelation.class);
+		if (null == record) {
+			return new ResultMsg(ErrorCode.未绑定.getCode(), ErrorCode.未绑定.getMsg());
+		}
+		mongoTemplate.remove(record);
+		return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
 	}
 
 }

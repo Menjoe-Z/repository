@@ -1,6 +1,5 @@
 package com.plzt.onenet.main.commmon;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;

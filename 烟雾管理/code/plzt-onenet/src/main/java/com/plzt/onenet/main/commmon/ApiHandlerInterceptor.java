@@ -15,13 +15,13 @@ public class ApiHandlerInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		String apiKey = request.getHeader("api-key");
-		if (StringUtils.isEmpty(apiKey) || !Constant.API_KEY.equals(apiKey)) {
+		/*if (StringUtils.isEmpty(apiKey) || !Constant.API_KEY.equals(apiKey)) {
 			ResultMsg body = new ResultMsg(ErrorCode.认证失败.getCode(), ErrorCode.认证失败.getMsg());
 			response.getWriter().print(JSONObject.fromObject(body).toString());
 			response.getWriter().flush();
 			response.getWriter().close();
 			return false;
-		}
+		}*/
 		return true;
 	}
 	

@@ -14,4 +14,8 @@ public interface DeviceService {
 	ResultMsg deviceStatus(String devid);
 	
 	ResultEntity bindList(Integer pageNumber);
+	
+	ResultEntity deviceList(Integer pageNumber, String online, String priv, String key_word);
+
+	ResultMsg removeBind(String devid, String objid);
 }

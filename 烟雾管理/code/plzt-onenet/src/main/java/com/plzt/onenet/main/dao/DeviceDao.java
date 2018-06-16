@@ -1,10 +1,14 @@
 package com.plzt.onenet.main.dao;
 
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.plzt.onenet.main.commmon.HttpHandler;
+import com.plzt.onenet.main.commmon.ResultEntity;
 
 import net.sf.json.JSONObject;
 
@@ -23,9 +27,20 @@ public class DeviceDao {
 	}
 
 	public String smoke(String devid) {
-		JSONObject params = new JSONObject();
-		params.put("cmd", "smoke");
-		String resultStr = httpHandler.doPost("/cmds?device_id=" + devid, params.toString());
+		String device = getDevice(devid);
+		if (StringUtils.isEmpty(device)) {
+			return null;
+		}
+		JSONObject deviceObj = JSONObject.fromObject(device);
+		String imsi = deviceObj.getString("imsi");
+		String action = "/nbiot?imei="+ imsi +"&obj_id=3342&obj_inst_id=0&mode=2";
+		String params = "{\"data\":[{\"res_id\":5750,\"val\":\"FORG\"}]}";
+		String resultStr = httpHandler.doPost(action, params.toString());
+		return resultStr;
+	}
+
+	public String deviceList(Map<String, Object> params) {
+		String resultStr = httpHandler.doGet("/devices", params);
 		return resultStr;
 	}
 	

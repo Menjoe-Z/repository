@@ -18,7 +18,13 @@ public class ResultEntity {
 		this.pageNo = pageNo;
 		this.rows = rows;
 	}
-
+	
+	public ResultEntity(Integer total, Integer pageNo) {
+		super();
+		this.total = total;
+		this.pageNo = pageNo;
+	}
+	
 	public Integer getTotal() {
 		return total;
 	}

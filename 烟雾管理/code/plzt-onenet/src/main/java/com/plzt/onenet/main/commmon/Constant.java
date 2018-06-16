@@ -10,4 +10,6 @@ public final class Constant {
 	
 	public static final String API_KEY = "RSV5f2rhLBFHD9BF5RVFDxIvsxHhBD/57FJ9PYlQ8ec=";
 	
+	public static final String ALERT_CENTER = "http://";
+	
 }

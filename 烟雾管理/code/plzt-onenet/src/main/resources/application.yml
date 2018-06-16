@@ -3,11 +3,14 @@ server:
 spring:
   thymeleaf:
     cache: false
-    mode: HTML
+#    mode: HTML
+    prefix: classpath:/templates/  
+    suffix: .html
   data:
     mongodb:
       uri: mongodb://localhost:27017
       database: plzt_onenet
+    
 logging:
   level: 
     root: INFO

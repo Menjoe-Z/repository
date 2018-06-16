@@ -48,7 +48,7 @@ public class DeviceController {
 		return new ResultMsg(ErrorCode.操作失败.getCode(), ErrorCode.操作失败.getMsg());
 	}
 	
-	@PostMapping
+	@PostMapping("/smoke")
 	public ResultMsg smoke(
 			@RequestParam("devid")String devid,
 			@RequestParam("objid")String objid
@@ -56,7 +56,31 @@ public class DeviceController {
 		try {
 			return deviceService.smoke(devid, objid);
 		} catch (Exception e) {
+			LOGGER.error("点烟出错出错", e);
+		}
+		return new ResultMsg(ErrorCode.操作失败.getCode(), ErrorCode.操作失败.getMsg());
+	}
+	
+	@PostMapping("/bind/remove")
+	public ResultMsg removeBind(
+			@RequestParam("devid")String devid,
+			@RequestParam("objid")String objid
+		) {
+		try {
+			return deviceService.removeBind(devid, objid);
+		} catch (Exception e) {
 			LOGGER.error("绑定设备出错", e);
+		}
+		return new ResultMsg(ErrorCode.操作失败.getCode(), ErrorCode.操作失败.getMsg());
+	}
+	
+	@PostMapping("/alert")
+	public ResultMsg alert(@RequestParam(value = "alert", defaultValue = "false")String alert) {
+		try {
+			System.setProperty("alert", alert);
+			return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
+		} catch (Exception e) {
+			LOGGER.error("开启上报出错", e);
 		}
 		return new ResultMsg(ErrorCode.操作失败.getCode(), ErrorCode.操作失败.getMsg());
 	}

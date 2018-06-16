@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>主页</title>
-<link th:include="/common/resources :: resources"/>
+<link th:include="common/resources :: resources"/>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -30,42 +30,20 @@
   </div>
 </nav>
 <div class="container-fluid">
-	<hr class="simple" color="#6f5499" />
 	<table id="device-table" class="table table-bordered text text-center" data-pagination="true">
 	   <thead>
 	        <tr>
 	            <th data-field="id" data-width="100">ID</th>
-	            <th data-field="title">名称</th>
-	            <th data-field="online" data-formatter="online_style">是否在线</th>
-	            <th data-field="" data-formatter="bind_style">是否绑定</th>
-	            <th data-field="location" data-formatter="format">地理位置</th>
-	            <th data-field="auth_info" data-formatter="format">认证信息</th>
-	            <th data-field="create_time">创建时间</th>
-	            <!-- <th data-field="fmt">操作</th> -->
+	            <th data-field="devid">名称</th>
+	            <th data-field="objid">是否在线</th>
+	            <th data-field="createtime">创建时间</th>
 	        </tr>
 	    </thead>
 	</table>
 </div>
 </body>
-<script>
-function online_style(value) {
-	value += '';
-	if (value == 'false') {
-		return '<p class="label label-danger">离线</p>';
-	} else if (value == 'true') {
-		return '<p class="label label-success">在线</p>';
-	}
-}
-function bind_style(value) {
-	return '<p class="label label-success">是</p>';
-}
-function format(value) {
-	return JSON.stringify(value);
-}
-function search() {
-	let params = $("#search_form").serializeJson() || {};
-	init_page("#search_form", params);
-}
+<script th:inline="javascript">
+
 function init_page(toolbar_el, search_condition) {
 	let table_opt = {
 	   method: 'get',
@@ -73,7 +51,6 @@ function init_page(toolbar_el, search_condition) {
 	   striped: true,
 	   pagination: true,
 	   pageSize: 30,
-	   pageList: [30],
 	   queryParams: function (params) {
 		   params = params || {};
 		   for (let key in search_condition) {

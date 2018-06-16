@@ -16,12 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import com.plzt.onenet.main.commmon.HttpHandler;
 import com.plzt.onenet.main.dao.DeviceDao;
 
 import net.sf.json.JSONObject;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@RunWith(SpringRunner.class)
 public class MainTest {
 	
 	@Autowired
@@ -29,7 +30,7 @@ public class MainTest {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MainTest.class);
 	
-	@Test
+	//@Test
 	public void test1() {
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.add("api-key", "mpXtBeHRkt2Aj0Ye3=48RaoBmK4=");
@@ -46,7 +47,7 @@ public class MainTest {
 		//LOGGER.info(data.getString("data"));
 	}
 	
-	@Test
+	//@Test
 	public void test2() {
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.add("api-key", "mpXtBeHRkt2Aj0Ye3=48RaoBmK4=");
@@ -63,10 +64,27 @@ public class MainTest {
 	}
 	@Autowired
 	private DeviceDao deviceDao; 
-	@Test
+	//@Test
 	public void test3() {
 		System.out.println(deviceDao.smoke("33362340"));
 	}
+	@Autowired
+	private HttpHandler httpHandler;
+	//@Test
+	public void test4() {
+		String action = "/nbiot?imei=869664030013299&obj_id=3342&obj_inst_id=0&mode=2";
+		//String action = "/nbiot/execute";
+		String params = "{\"data\":[{\"res_id\":5750,\"val\":\"FORG\"}]}";
+		String sss = httpHandler.doPost(action, params);
+		System.out.println(sss);
+	}
 	
+	//@Test
+	public void test5() {
+		//String action = "/nbiot?imei=869664030013299&res_id=869664030013299obj_id=29458732&obj_inst_id=869664030013299";
+		String action = "/devices/33362340";
+		String sss = httpHandler.doGet(action);
+		System.out.println(sss);
+	}
 	
 }

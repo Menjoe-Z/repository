@@ -82,8 +82,13 @@ public class DeviceServiceImpl implements DeviceService {
 			return new ResultMsg(ErrorCode.未绑定.getCode(), ErrorCode.未绑定.getMsg());
 		}
 		
-		deviceDao.smoke(devid);
+		String result = deviceDao.smoke(devid);
+		JSONObject obj = JSONObject.fromObject(result);
 		
+		String errno = obj.getString("errno");
+		if (!"0".equals(errno)) {
+			return new ResultMsg(ErrorCode.超时.getCode(), ErrorCode.超时.getMsg());
+		}
 		return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
 	}
 
@@ -91,12 +96,12 @@ public class DeviceServiceImpl implements DeviceService {
 	public ResultMsg deviceStatus(String devid) {
 		String result = deviceDao.getDevice(devid);
 		if (StringUtils.isEmpty(result)) {
-			return new ResultMsg(ErrorCode.设备不存在.getCode(), "", ErrorCode.设备不存在.getMsg());
+			return new ResultMsg(ErrorCode.设备不存在.getCode(), ErrorCode.设备不存在.getMsg());
 		}
 		JSONObject data = JSONObject.fromObject(result);
 		String online = data.getString("online");
 		if ("false".equals(online.toLowerCase())) {
-			return new ResultMsg(ErrorCode.设备不在线.getCode(), "", ErrorCode.设备不在线.getMsg());
+			return new ResultMsg(ErrorCode.设备不在线.getCode(), ErrorCode.设备不在线.getMsg());
 		}
 		return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
 	}
@@ -157,6 +162,12 @@ public class DeviceServiceImpl implements DeviceService {
 		}
 		mongoTemplate.remove(record);
 		return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
+	}
+
+	@Override
+	public List<DeviceRelation> bindListAll() {
+		List<DeviceRelation> rows = mongoTemplate.findAll(DeviceRelation.class);
+		return rows;
 	}
 
 }

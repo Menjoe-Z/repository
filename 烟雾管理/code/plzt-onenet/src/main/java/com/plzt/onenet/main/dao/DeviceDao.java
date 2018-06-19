@@ -23,6 +23,9 @@ public class DeviceDao {
 		String resultStr = httpHandler.doGet("/devices/" + devid);
 		JSONObject result = JSONObject.fromObject(resultStr);
 		JSONObject data = result.getJSONObject("data");
+		if (data.isEmpty()) {
+			return null;
+		}
 		return data.toString();
 	}
 

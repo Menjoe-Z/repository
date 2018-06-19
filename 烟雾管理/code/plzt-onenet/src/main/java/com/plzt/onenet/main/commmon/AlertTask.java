@@ -1,26 +1,29 @@
 package com.plzt.onenet.main.commmon;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.plzt.onenet.main.entity.DeviceRelation;
+import com.plzt.onenet.main.service.DeviceService;
 
-import com.plzt.onenet.main.dao.DeviceDao;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Component
 public class AlertTask {
 	
 	@Autowired
-	private DeviceDao deviceDao;
+	private DeviceService deviceService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -32,11 +35,38 @@ public class AlertTask {
 		try {
 			String alert = System.getProperty("alert");
 			if ("true".equals(alert)) {
-				Map<String, Object> params = new HashMap<>();
-				params.put("online", "false");
-				String result = deviceDao.deviceList(params);
-				if (!StringUtils.isEmpty(result)) {
-					HttpEntity<String> entity = new HttpEntity<String>(result, new HttpHeaders());
+				List<String> deviceIds = new ArrayList<>();
+				int index = 1;
+				while (true) {
+					ResultEntity entity = deviceService.deviceList(index, "false", null, null);
+					if (StringUtils.isEmpty(entity.getRows())) {
+						break;
+					}
+					JSONArray arr = JSONArray.fromObject(entity.getRows());
+					Iterator<?> it = arr.iterator();
+					while (it.hasNext()) {
+						JSONObject obj = JSONObject.fromObject(it.next());
+						deviceIds.add(obj.getString("id"));
+					}
+					index++;
+				}
+				if (deviceIds.size() > 0) {
+					List<DeviceRelation> list = deviceService.bindListAll();
+					if (list == null || list.isEmpty()) {
+						return;
+					}
+					List<String> bindDeviceIds = new ArrayList<>();
+					for (DeviceRelation relation : list) {
+						if (!bindDeviceIds.contains(relation.getDevid())) {
+							bindDeviceIds.add(relation.getDevid());
+						}
+					}
+					for (String id : deviceIds) {
+						if (!bindDeviceIds.contains(id)) {
+							deviceIds.remove(id);
+						}
+					}
+					HttpEntity<String> entity = new HttpEntity<String>(JSONArray.fromObject(deviceIds).toString());
 					restTemplate.postForObject(Constant.ALERT_CENTER, entity, String.class);
 					LOGGER.info("有设备掉线, 上报一次");
 				}

@@ -8,6 +8,7 @@ public enum ErrorCode {
 	设备不存在(101, "device not exists"),
 	设备不在线(102, "device not online"),
 	OK(0, "ok"),
+	超时(-3, "time out"),
 	操作失败(-1, "action fail");
 	
 	private String msg;

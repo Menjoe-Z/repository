@@ -86,10 +86,20 @@ public class DeviceServiceImpl implements DeviceService {
 		JSONObject obj = JSONObject.fromObject(result);
 		
 		String errno = obj.getString("errno");
-		if (!"0".equals(errno)) {
+		
+		if (StringUtils.isEmpty(errno)) {
 			return new ResultMsg(ErrorCode.超时.getCode(), ErrorCode.超时.getMsg());
 		}
-		return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
+		
+		if ("0".equals(errno)) {
+			return new ResultMsg(ErrorCode.OK.getCode(), ErrorCode.OK.getMsg());
+		} else if ("16".equals(errno)) {
+			return new ResultMsg(ErrorCode.超时.getCode(), ErrorCode.超时.getMsg());
+		} else if ("14".equals(errno)) {
+			return new ResultMsg(ErrorCode.设备不在线.getCode(), ErrorCode.设备不在线.getMsg());
+		} else {
+			return new ResultMsg(ErrorCode.状态未知.getCode(), ErrorCode.状态未知.getMsg());
+		}
 	}
 
 	@Override
